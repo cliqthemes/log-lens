@@ -32,8 +32,7 @@ First public release.
   SQLite is file-per-application, Postgres schema-per-application, MySQL
   database-per-application.
 - **Discrete migrations** with up/down, compiled per engine, plus a rollback
-  path. An existing SQLite database predating the migration system is bridged
-  automatically on first connect.
+  path.
 - **Connectors** (local directory, SSH) with byte-offset checkpoints,
   incremental pulls, rotation and rename reconciliation, a detached background
   worker, a scheduled drain, and a stale-run reaper.
@@ -49,20 +48,3 @@ First public release.
   `log-lens:sync`, and `log-lens:linear-sync` commands.
 - **Agent skills** (`skills/log-lens-issues-*`) for triaging and fixing issues
   through the API.
-
-### Notes for anyone already running Log Lens from source
-
-- **Issue fingerprints change.** The culprit stack frame used to be the first
-  frame containing `/app/`, which is the framework's own directory on the most
-  common Laravel container layout — so the culprit was routinely reported as a
-  framework internal. It is now the first frame outside `/vendor/` and
-  `/node_modules/`. New occurrences of an affected error open a new issue rather
-  than appending to the old one; nothing is lost, and a reindex regroups the
-  existing occurrences under the corrected fingerprints.
-- **Horizon console logs now parse.** A `horizon*.log` holding what
-  `horizon`/`queue:work` print to the console previously ingested to nothing.
-  Re-import those files to pick up their history.
-- **Postgres and MySQL installs should be checked for cross-application row
-  bleed before upgrading.** The path-derived tenant fallback could collapse
-  several applications into one schema or database. SQLite installs are
-  unaffected — file-per-application was always isolated.
