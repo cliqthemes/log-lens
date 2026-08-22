@@ -8,8 +8,6 @@ Both published packages — `cliqthemes/log-lens-core` (the standalone engine)
 and `cliqthemes/log-lens` (the Laravel adapter) — are versioned together and
 share this file.
 
-## Unreleased
-
 ## 0.1.0 — 2026-08-22
 
 First public release.
