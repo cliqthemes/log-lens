@@ -104,7 +104,7 @@ core `LogLens\Kernel`, whose `LogLensResponse` becomes a Laravel JSON
 response. The SPA calls the API with same-prefix relative URLs, and its assets are
 served from `public/vendor/log-lens`.
 
-MIT licensed. Release history:
+MIT licensed. Release history: [CHANGELOG.md](CHANGELOG.md) and
 [releases](https://github.com/cliqthemes/log-lens/releases). Bugs, requests, and
 security advisories for both packages go to
 [cliqthemes/log-lens](https://github.com/cliqthemes/log-lens/issues).
