@@ -8,7 +8,32 @@ Both published packages — `cliqthemes/log-lens-core` (the standalone engine)
 and `cliqthemes/log-lens` (the Laravel adapter) — are versioned together and
 share this file.
 
-## 0.1.0 — 2026-08-22
+## 0.2.0 — 2026-08-26
+
+### Added
+
+- **`log-lens:install`**, an interactive setup wizard for the Laravel adapter:
+  publishes the assets/config, detects `storage/logs` and offers to import it,
+  offers a connector for ongoing sync (printing the schedule line to paste
+  in), offers to turn on the zero-key error reporter, and can generate an
+  agent token. Safe to re-run. `vendor:publish` still works by hand.
+- **Agent tokens** (`LOG_LENS_AGENT_TOKEN` / `log-lens.agent_token`) — a
+  sessionless credential for the Laravel adapter, separate from the
+  standalone package's API token. Sent as `X-Log-Lens-Agent-Token` or a
+  `Bearer` header, it unlocks the JSON API only (never the dashboard shell),
+  is checked before any registered auth callback, and is meant for the
+  bundled issue-fixing skill or a script — not a person's browser session.
+  See [Laravel access control](docs/features/laravel-access-control.md#method-4---an-agent-token-for-sessionless-callers).
+- The Claude/Codex agent skill now detects a Laravel-embedded install first
+  (looking for `vendor/cliqthemes/log-lens` + `artisan`) and authenticates
+  against it with an agent token, instead of assuming a standalone install.
+
+### Changed
+
+- The Laravel adapter's README and access-control docs no longer describe
+  authorization as "matching opcodesio/log-viewer" — Log Lens's Laravel
+  auth model is documented on its own terms.
+
 
 First public release.
 

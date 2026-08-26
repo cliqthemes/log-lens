@@ -19,13 +19,22 @@ Requires PHP 8.2+ and Laravel 10, 11, 12, or 13.
 
 ```bash
 composer require cliqthemes/log-lens
+php artisan log-lens:install
+```
+
+The service provider is auto-discovered and the UI assets ship pre-built, so no
+Node build is needed. `log-lens:install` publishes the assets/config, offers to
+import `storage/logs`, offers a connector for ongoing sync (printing the
+schedule line to paste in), offers the zero-key error reporter, and reminds
+you about access control. Safe to re-run. Prefer doing it by hand?
+
+```bash
 php artisan vendor:publish --tag=log-lens-assets   # publishes the built UI to public/vendor/log-lens
 php artisan vendor:publish --tag=log-lens-config   # optional: config/log-lens.php
 ```
 
-The service provider is auto-discovered and the UI assets ship pre-built, so no
-Node build is needed. Visit `/log-lens` (see [Authorization](#authorization)
-first — access is open in `local` by default).
+Either way, visit `/log-lens` (see [Authorization](#authorization) first —
+access is open in `local` by default).
 
 ## Authorization
 
@@ -37,7 +46,7 @@ with nothing configured, is:
   unauthenticated/incognito tab). Convenient for development; be aware of it.
 - **any other environment → denied** to everyone (fails safe when deployed).
 
-Restrict it with any one of these (matching opcodesio/log-viewer):
+Restrict it with any one of these:
 
 **1. An auth callback** in a service provider's `boot()`:
 

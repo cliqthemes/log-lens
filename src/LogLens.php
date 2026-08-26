@@ -12,7 +12,12 @@ use Throwable;
 /**
  * Authorization gate for the Log Lens dashboard and API.
  *
- * Access is decided in this order (mirroring opcodesio/log-viewer):
+ * Access is decided in this order:
+ *   0. a valid `log-lens.agent_token` presented on an API request (never the
+ *      dashboard shell) — see the config file. Checked first and
+ *      independently of the rules below, since it exists specifically for a
+ *      sessionless caller (a CI job, the bundled agent skill) that the rules
+ *      below have no way to admit;
  *   1. a callback registered via LogLens::auth();
  *   2. otherwise a `viewLogLens` Laravel Gate, if one is defined;
  *   3. otherwise access is granted only in the `local` environment.
@@ -44,6 +49,9 @@ final class LogLens
 
     public static function authorized(Request $request): bool
     {
+        if (self::agentTokenMatches($request)) {
+            return true;
+        }
         if (self::$authCallback !== null) {
             return (bool) (self::$authCallback)($request);
         }
@@ -51,6 +59,31 @@ final class LogLens
             return Gate::allows('viewLogLens');
         }
         return app()->environment('local');
+    }
+
+    /**
+     * True when `log-lens.agent_token` is configured and the request presents
+     * it, as `X-Log-Lens-Agent-Token` or `Authorization: Bearer <token>`, on
+     * an API call. Never matches the dashboard's HTML shell (a request with
+     * no `api` parameter) — the token is for a script or agent to call the
+     * JSON API, not to browse the UI as a leaked env var. An empty configured
+     * token (the default) always returns false, so nothing changes for an
+     * app that hasn't set one.
+     */
+    private static function agentTokenMatches(Request $request): bool
+    {
+        $configured = trim((string) config('log-lens.agent_token', ''));
+        if ($configured === '' || !$request->has('api')) {
+            return false;
+        }
+        $presented = (string) $request->header('X-Log-Lens-Agent-Token', '');
+        if ($presented === '') {
+            $authorization = (string) $request->header('Authorization', '');
+            if (str_starts_with($authorization, 'Bearer ')) {
+                $presented = substr($authorization, 7);
+            }
+        }
+        return $presented !== '' && hash_equals($configured, $presented);
     }
 
     /**

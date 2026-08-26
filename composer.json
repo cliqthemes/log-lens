@@ -29,6 +29,15 @@
       "LogLens\\Laravel\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "LogLens\\Laravel\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "lint": "find src -name '*.php' -print0 | xargs -0 -n1 php -l"
+  },
   "extra": {
     "branch-alias": {
       "dev-main": "0.1.x-dev"
@@ -41,5 +50,9 @@
   },
   "config": {
     "sort-packages": true
+  },
+  "require-dev": {
+    "orchestra/testbench": "^11.0",
+    "phpunit/phpunit": "^11.5"
   }
 }

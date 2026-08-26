@@ -118,6 +118,27 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Agent token
+    |--------------------------------------------------------------------------
+    | Lets an out-of-band caller (the bundled Claude/Codex issue-fixing skill,
+    | a script, a CI job) reach the JSON API without a Laravel session — the
+    | one credential Laravel mode otherwise has no equivalent of (there's no
+    | API key the way standalone has; access is normally the host app's own
+    | auth). Unset by default: nothing outside a real session or the `local`
+    | environment can reach Log Lens until you set this.
+    |
+    | Set LOG_LENS_AGENT_TOKEN (generate one with `php artisan log-lens:install`,
+    | or `Str::random(40)` by hand) and send it as
+    | `X-Log-Lens-Agent-Token: <token>` — checked in LogLens::authorized()
+    | before any other rule, but only on API requests (`?api=...`), never on
+    | the dashboard's HTML shell. A caller presenting it gets
+    | `default-role` above, same as an authenticated host user would.
+    | Rotate by changing the value; there is nothing else to revoke.
+    */
+    'agent_token' => env('LOG_LENS_AGENT_TOKEN', ''),
+
+    /*
+    |--------------------------------------------------------------------------
     | Workspace root
     |--------------------------------------------------------------------------
     | Where Log Lens keeps its SQLite database and the logs/processed/sources

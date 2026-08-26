@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use LogLens\Config;
 use LogLens\Laravel\Console\ImportCommand;
+use LogLens\Laravel\Console\InstallCommand;
 use LogLens\Laravel\Console\LinearSyncCommand;
 use LogLens\Laravel\Console\SyncCommand;
 use LogLens\Laravel\Http\Authorize;
@@ -54,7 +55,7 @@ final class LogLensServiceProvider extends ServiceProvider
                 [__DIR__ . '/../resources/dist' => public_path('vendor/log-lens')],
                 'log-lens-assets',
             );
-            $this->commands([ImportCommand::class, SyncCommand::class, LinearSyncCommand::class]);
+            $this->commands([InstallCommand::class, ImportCommand::class, SyncCommand::class, LinearSyncCommand::class]);
         }
     }
 
