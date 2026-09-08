@@ -8,6 +8,32 @@ Both published packages — `cliqthemes/log-lens-core` (the standalone engine)
 and `cliqthemes/log-lens` (the Laravel adapter) — are versioned together and
 share this file.
 
+## 0.3.0 — 2026-09-08
+
+### Added
+
+- **Resumable Linear sync**: a persisted, resumable cursor splits a
+  workspace pull into bounded batches across calls instead of one
+  all-at-once sync — a backfill phase (first full pass over the filter)
+  followed by an incremental phase (only issues updated since). See
+  [Backfilling and staying in sync](docs/features/linear-integration.md#backfilling-and-staying-in-sync).
+- **Linear write-back comment default**: a `status_writeback_comment`
+  setting (Settings → Linear → "Comment by default") seeds whether the
+  per-status-change "Also comment on Linear" checkbox starts checked,
+  without forcing it either way. See
+  [Status write-back](docs/features/linear-integration.md#status-write-back).
+- **Bulk push current status to Linear** (`POST ?api=linear-push`): push
+  the current Log Lens status of any number of linear-sourced issues to
+  Linear right now, regardless of whether write-back was on when that
+  status was actually set. See
+  [Bulk push current status](docs/features/linear-integration.md#bulk-push-current-status).
+- **MCP server** (`bin/mcp-server.php`): a [Model Context
+  Protocol](https://modelcontextprotocol.io) server over JSON-RPC 2.0/stdio
+  exposing `issues_{list,get,update_status}`, `applications_list`, and
+  `linear_{sync,test}` as tools for an MCP-capable agent (Claude Code,
+  Claude Desktop, etc.) — the same API every HTTP client uses, no parallel
+  logic. See [MCP server](docs/features/mcp-server.md).
+
 ## 0.2.0 — 2026-08-26
 
 ### Added
