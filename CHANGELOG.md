@@ -8,6 +8,25 @@ Both published packages — `cliqthemes/log-lens-core` (the standalone engine)
 and `cliqthemes/log-lens` (the Laravel adapter) — are versioned together and
 share this file.
 
+## 0.3.1 — 2026-10-07
+
+### Fixed
+
+- **SSH connector under containers (Lerd, Docker, FPM users)**: strict host-key
+  checking relied on the process user's `~/.ssh/known_hosts`, which does not
+  exist there, so every sync failed with "No ED25519 host key is known". Without
+  a `known_hosts_file`, Log Lens now keeps a per-application known-hosts file
+  (`<sources>/.ssh/known_hosts`) and trusts a host on first use
+  (`StrictHostKeyChecking=accept-new`); a changed key is still refused. Setting
+  `known_hosts_file` keeps strict checking. See
+  [SSH connector](docs/features/ssh-connector.md).
+
+### Added
+
+- **Sync error log**: every failed connector sync is appended in full (exception,
+  remote `ssh` stderr, stack trace) to `<sources>/.logs/sync-errors.log`. The
+  dashboard and API still receive only the short, response-safe message.
+
 ## 0.3.0 — 2026-09-08
 
 ### Added
