@@ -8,6 +8,16 @@ Both published packages — `cliqthemes/log-lens-core` (the standalone engine)
 and `cliqthemes/log-lens` (the Laravel adapter) — are versioned together and
 share this file.
 
+## 0.3.3 — 2026-10-07
+
+### Changed
+
+- **No Log Lens branding in text sent to third parties.** Linear write-back
+  comments now read `Marked **Fixed**.` instead of `Log Lens marked this issue
+  **Fixed**.`, and the default alert summary / test message no longer name Log
+  Lens, so a teammate reading Linear or an alert channel can't tell which tool
+  is behind it.
+
 ## 0.3.2 — 2026-10-07
 
 ### Fixed
