@@ -8,6 +8,16 @@ Both published packages — `cliqthemes/log-lens-core` (the standalone engine)
 and `cliqthemes/log-lens` (the Laravel adapter) — are versioned together and
 share this file.
 
+## 0.3.2 — 2026-10-07
+
+### Fixed
+
+- **"405 Not Allowed" when saving settings behind nginx**: the standalone
+  dashboard sent `PUT`/`PATCH`/`DELETE` requests to a directory URL (`/` or
+  `/ui/`), which nginx's directory-index step rejects for anything but
+  `GET`/`HEAD`/`POST`, so saves failed with `Unexpected token '<'`. API calls
+  now go to `index.php` explicitly.
+
 ## 0.3.1 — 2026-10-07
 
 ### Fixed
